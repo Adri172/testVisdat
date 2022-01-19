@@ -18,7 +18,7 @@ from bokeh.models import Slider, Select
 from bokeh.io import output_file, output_notebook, curdoc
 from bokeh.models.widgets import Tabs, Panel
 
-ds1 = pd.read_csv("DataSet1.csv", parse_dates=['date'])
+ds1 = pd.read_csv("covid19.csv", parse_dates=['date'])
 ds1.head()
 
 ds1["Name"] = "DataCovid"
