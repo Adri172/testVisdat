@@ -7,15 +7,14 @@ Original file is located at
     https://colab.research.google.com/drive/1OO1zmjSOrtfQZk6gUmzdY7L8k9h4JDOm
 """
 
-pip install bokeh
+
 
 import pandas as pd
 from bokeh.plotting import figure, show
 from bokeh.io import curdoc
 from bokeh.models import HoverTool, ColumnDataSource
-from bokeh.models import CategoricalColorMapper
-from bokeh.palettes import Spectral11
-from bokeh.layouts import widgetbox, row, gridplot
+from bokeh.models.widgets.sliders import DateRangeSlider
+from bokeh.layouts import row, column, gridplot
 from bokeh.models import Slider, Select
 from bokeh.io import output_file, output_notebook
 from bokeh.models.widgets import Tabs, Panel
@@ -82,11 +81,31 @@ covidFig.legend.click_policy = 'hide'
 covidFig2.legend.click_policy = 'hide'
 covidFig3.legend.click_policy = 'hide'
 
+date_slider_acc = DateRangeSlider(value=(min(newDS1['date']), max(newDS1['date'])),
+                              start=min(newDS1['date']),end=max(newDS1['date']),width=300)
+date_slider_acc.js_link('value', covidFig.x_range, 'start', attr_selector=0)
+date_slider_acc.js_link('value', covidFig.x_range, 'end', attr_selector=1)
+
+date_slider_new = DateRangeSlider(value=(min(newDS1['date']), max(newDS1['date'])),
+                              start=min(newDS1['date']),end=max(newDS1['date']),width=300)
+date_slider_new.js_link('value', covidFig2.x_range, 'start', attr_selector=0)
+date_slider_new.js_link('value', covidFig2.x_range, 'end', attr_selector=1)
+
+date_slider_neg = DateRangeSlider(value=(min(newDS1['date']), max(newDS1['date'])),
+                              start=min(newDS1['date']),end=max(newDS1['date']),width=300)
+date_slider_neg.js_link('value', covidFig3.x_range, 'start', attr_selector=0)
+date_slider_neg.js_link('value', covidFig3.x_range, 'end', attr_selector=1)
+
+layout1 = row(date_slider_acc, covidFig)
+layout2 = row(date_slider_new, covidFig2)
+layout3 = row(date_slider_neg, covidFig3)
+
+
 cv = Panel(child= covidFig, title='acc_confirmed')
 cv2 = Panel(child= covidFig2, title='new_confirmed')
 cv3 = Panel(child= covidFig3, title='acc_negative')
 
 tabs = Tabs(tabs=[cv, cv2, cv3])
-show(tabs)
 
-pip freeze > requirements.txt
+curdoc().add_root(tabs)
+
